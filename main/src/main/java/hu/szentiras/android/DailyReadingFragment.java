@@ -10,7 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.webkit.WebView;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by Bertalan on 5/30/2014.
@@ -75,13 +77,50 @@ public class DailyReadingFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container,
                                  Bundle savedInstanceState) {
-            View result=inflater.inflate(R.layout.editor, container, false);
-            EditText editor=(EditText)result.findViewById(R.id.editor);
+            View result = inflater.inflate(R.layout.daily_reader, container, false);
+
+            WebView webView = (WebView) result.findViewById(R.id.webView);
+
+            String url = ("http://10.0.2.2/api/lectures");
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Lectures lectures = restTemplate.getForObject(url, Lectures.class);
+            webView.loadData(lectures.lectures[0].getText(), "text/html", "UTF-8");
             int position=getArguments().getInt(KEY_POSITION, -1);
+            return result;
+        }
+    }
 
-            editor.setHint(getTitle(getActivity(), position));
+    public static class Lectures {
+        private Lecture[] lectures;
 
-            return(result);
+        public Lecture[] getLectures() {
+            return lectures;
+        }
+
+        public void setLectures(Lecture[] lectures) {
+            this.lectures = lectures;
+        }
+    }
+
+    public static class Lecture {
+        private String text;
+        private String ref;
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getRef() {
+            return ref;
+        }
+
+        public void setRef(String ref) {
+            this.ref = ref;
         }
     }
 
