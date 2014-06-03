@@ -1,12 +1,14 @@
 package hu.szentiras.android;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,20 +59,20 @@ public class DailyReadingFragment extends Fragment {
     }
 
     public static class EditorFragment extends Fragment {
-        private static final String KEY_POSITION="position";
+        private static final String KEY_POSITION = "position";
 
         static EditorFragment newInstance(int position) {
-            EditorFragment frag=new EditorFragment();
-            Bundle args=new Bundle();
+            EditorFragment frag = new EditorFragment();
+            Bundle args = new Bundle();
 
             args.putInt(KEY_POSITION, position);
             frag.setArguments(args);
 
-            return(frag);
+            return (frag);
         }
 
         static String getTitle(Context ctxt, int position) {
-            return(String.format(ctxt.getString(R.string.hint), position + 1));
+            return (String.format(ctxt.getString(R.string.hint), position + 1));
         }
 
         @Override
@@ -79,16 +81,42 @@ public class DailyReadingFragment extends Fragment {
                                  Bundle savedInstanceState) {
             View result = inflater.inflate(R.layout.daily_reader, container, false);
 
-            WebView webView = (WebView) result.findViewById(R.id.webView);
+            new HttpRequestTask(result).execute();
 
-            String url = ("http://10.0.2.2/api/lectures");
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            Lectures lectures = restTemplate.getForObject(url, Lectures.class);
-            webView.loadData(lectures.lectures[0].getText(), "text/html", "UTF-8");
-            int position=getArguments().getInt(KEY_POSITION, -1);
             return result;
         }
+    }
+
+    private static class HttpRequestTask extends AsyncTask<Void, Void, Lectures> {
+
+        private View view;
+
+        public HttpRequestTask(View view) {
+
+            this.view = view;
+        }
+
+        @Override
+        protected Lectures doInBackground(Void... params) {
+            try {
+                String url = ("http://10.0.2.2/api/lectures");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                Lectures lectures = restTemplate.getForObject(url, Lectures.class);
+                return lectures;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Lectures lectures) {
+            WebView webView = (WebView) view.findViewById(R.id.webView);
+            webView.loadData(lectures.lectures[0].getText(), "text/html", "UTF-8");
+        }
+
     }
 
     public static class Lectures {
