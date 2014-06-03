@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import hu.szentiras.android.daily.DailyReadingFragment;
-import hu.szentiras.android.daily.DailyReadingLoaderFragment;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -53,9 +52,6 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new DailyReadingLoaderFragment())
-                        .commit();
                 new HttpRequestTask(this).execute();
                 break;
             case 2:
@@ -82,7 +78,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         protected Lectures doInBackground(Void... params) {
             try {
-                String url = ("http://10.0.2.2/api/lectures");
+                String url = "http://10.0.2.2/api/lectures";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 Lectures lectures = restTemplate.getForObject(url, Lectures.class);

@@ -13,7 +13,9 @@ public class ReadingPagerAdapter extends FragmentPagerAdapter {
 
     public ReadingPagerAdapter(FragmentManager fm, DailyReadingFragment.Lectures lectures) {
         super(fm);
-        this.readingCount = lectures.getLectures().length;
+        if (lectures != null) {
+            this.readingCount = lectures.getLectures().length;
+        }
     }
 
     @Override
