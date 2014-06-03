@@ -1,22 +1,21 @@
 package hu.szentiras.android;
 
-import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import hu.szentiras.android.daily.DailyReadingFragment;
+import hu.szentiras.android.daily.DailyReadingLoaderFragment;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import static hu.szentiras.android.daily.DailyReadingFragment.Lectures;
 
 
 public class MainActivity extends ActionBarActivity
@@ -51,10 +50,13 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment;
+        Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new DailyReadingFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new DailyReadingLoaderFragment())
+                        .commit();
+                new HttpRequestTask(this).execute();
                 break;
             case 2:
                 fragment = new SearchFragment();
@@ -67,6 +69,39 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, fragment)
                     .commit();
         }
+    }
+
+    private class HttpRequestTask extends AsyncTask<Void, Void, Lectures> {
+
+        private MainActivity mainActivity;
+
+        public HttpRequestTask(MainActivity mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+
+        @Override
+        protected Lectures doInBackground(Void... params) {
+            try {
+                String url = ("http://10.0.2.2/api/lectures");
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                Lectures lectures = restTemplate.getForObject(url, Lectures.class);
+                return lectures;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Lectures lectures) {
+            mainActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new DailyReadingFragment(lectures))
+                    .commit();
+
+        }
+
     }
 
     public void onSectionAttached(int number) {
