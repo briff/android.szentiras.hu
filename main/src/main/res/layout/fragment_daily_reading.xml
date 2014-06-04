@@ -1,11 +1,33 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-                                   android:id="@+id/pager"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v4.view.PagerTabStrip
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"/>
+        android:layout_height="match_parent"
+        android:id="@+id/progressIndicatorFrame">
 
-</android.support.v4.view.ViewPager>
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dailyReadingProgress"
+            android:indeterminate="false"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                                       android:id="@+id/pager"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="match_parent">
+
+        <android.support.v4.view.PagerTabStrip
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"/>
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

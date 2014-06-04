@@ -9,22 +9,29 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class ReadingPagerAdapter extends FragmentPagerAdapter {
 
-    private int readingCount;
+    private DailyReadingFragment.Lectures lectures;
 
     public ReadingPagerAdapter(FragmentManager fm, DailyReadingFragment.Lectures lectures) {
         super(fm);
-        if (lectures != null) {
-            this.readingCount = lectures.getLectures().length;
-        }
+        this.lectures = lectures;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return new ReadingFragment();
+        return new ReadingFragment(lectures.getLectures()[position]);
     }
 
     @Override
     public int getCount() {
-        return readingCount;
+        if (lectures != null) {
+            return lectures.getLectures().length;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return lectures.getLectures()[position].getRef();
     }
 }

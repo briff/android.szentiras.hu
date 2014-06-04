@@ -4,15 +4,6 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Jn 2, 3-4.6-7"
-        android:id="@+id/textView"
-        android:paddingLeft="4dp"
-        android:paddingTop="4dp"/>
-
     <WebView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
