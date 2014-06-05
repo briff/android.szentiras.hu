@@ -1,5 +1,6 @@
 package hu.szentiras.android.daily;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import hu.szentiras.android.MainActivity;
 import hu.szentiras.android.R;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -122,6 +124,12 @@ public class DailyReadingFragment extends Fragment {
                 return new Lectures[size];
             }
         };
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(1);
     }
 
     public static class Lecture implements Parcelable {
