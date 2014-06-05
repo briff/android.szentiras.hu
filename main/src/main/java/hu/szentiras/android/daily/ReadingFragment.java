@@ -5,11 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+import android.widget.TextView;
 import hu.szentiras.android.R;
 
 /**
- * Created by Bertalan on 6/3/2014.
+ * Fragment for actually display a reading
  */
 public class ReadingFragment extends Fragment {
 
@@ -22,8 +22,8 @@ public class ReadingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.daily_reader, container, false);
-        WebView webView = (WebView) result.findViewById(R.id.webView);
-        webView.loadData(lecture.getText(), "text/html; charset=UTF-8", null);
+        TextView readingText = (TextView) result.findViewById(R.id.readingText);
+        readingText.setText(lecture.getText());
         return result;
     }
 }

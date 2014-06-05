@@ -15,7 +15,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Created by Bertalan on 5/30/2014.
+ * Fragment to display all daily readings.
  */
 public class DailyReadingFragment extends Fragment {
 
@@ -31,16 +31,6 @@ public class DailyReadingFragment extends Fragment {
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, Lectures> {
-
-        private DailyReadingFragment fragment;
-        private LayoutInflater inflater;
-        private ViewGroup container;
-
-        public HttpRequestTask(DailyReadingFragment fragment, LayoutInflater inflater, ViewGroup container) {
-            this.fragment = fragment;
-            this.inflater = inflater;
-            this.container = container;
-        }
 
         @Override
         protected Lectures doInBackground(Void... params) {
@@ -74,19 +64,22 @@ public class DailyReadingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view;
+        view = inflater.inflate(R.layout.fragment_daily_reading, container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             lectures = savedInstanceState.getParcelable("lectures");
         }
-        View view;
-        view = inflater.inflate(R.layout.fragment_daily_reading, container, false);
         if (lectures == null) {
-            new HttpRequestTask(this, inflater, container).execute();
+            new HttpRequestTask().execute();
         } else {
             updateWithLectures(lectures);
         }
-        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-        pager.setAdapter(new ReadingPagerAdapter(getChildFragmentManager(), lectures));
-        return view;
     }
 
     @Override
