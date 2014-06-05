@@ -15,6 +15,9 @@ public class ReadingFragment extends Fragment {
 
     private DailyReadingFragment.Lecture lecture;
 
+    public ReadingFragment() {
+    }
+
     public ReadingFragment(DailyReadingFragment.Lecture lecture) {
         this.lecture = lecture;
     }
@@ -22,8 +25,20 @@ public class ReadingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.daily_reader, container, false);
-        TextView readingText = (TextView) result.findViewById(R.id.readingText);
-        readingText.setText(lecture.getText());
+        if (savedInstanceState != null) {
+            lecture = savedInstanceState.getParcelable("lecture");
+        }
+        if (lecture != null) {
+            TextView readingText = (TextView) result.findViewById(R.id.readingText);
+            readingText.setText(lecture.getText());
+        }
         return result;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("lecture", lecture);
+    }
+
 }
