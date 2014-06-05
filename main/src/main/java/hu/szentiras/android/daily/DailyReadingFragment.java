@@ -37,7 +37,7 @@ public class DailyReadingFragment extends Fragment {
         @Override
         protected Lectures doInBackground(Void... params) {
             try {
-                String url = "http://10.0.2.2/api/lectures";
+                String url = "http://" + getString(R.string.server_host) + "/api/lectures";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 Lectures lectures = restTemplate.getForObject(url, Lectures.class);

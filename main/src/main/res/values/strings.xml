@@ -14,4 +14,5 @@
     <string name="hint">Editor #%d</string>
     <string name="template_user_agent" translatable="false">"%1$s/%2$s (Linux; Android)"</string>
 
+    <string name="server_host">staging.szentiras.hu</string>
 </resources>

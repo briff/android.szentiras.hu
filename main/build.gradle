@@ -37,6 +37,15 @@ android {
             packageNameSuffix ".debug"
         }
     }
+    productFlavors {
+        full {
+        }
+        staging {
+            packageName "hu.szentiras.android.staging"
+        }
+        local {
+        }
+    }
 
     packagingOptions {
         exclude 'META-INF/ASL2.0'
