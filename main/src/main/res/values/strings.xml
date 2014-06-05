@@ -4,7 +4,6 @@
     <string name="app_name">Szentírás.hu</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Beállítások</string>
-    <string name="title_activity_nav">NavActivity</string>
     <string name="title_section1">Igenaptár</string>
     <string name="title_section2">Szentírás</string>
     <string name="title_section3">Keresés</string>

@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import hu.szentiras.android.daily.DailyReadingFragment;
+import hu.szentiras.android.scripture.ScriptureFragment;
+import hu.szentiras.android.search.SearchFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -46,9 +48,10 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new DailyReadingFragment())
-                        .commit();
+                fragment = new DailyReadingFragment();
+                break;
+            case 1:
+                fragment = new ScriptureFragment();
                 break;
             case 2:
                 fragment = new SearchFragment();
